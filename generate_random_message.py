@@ -1,11 +1,10 @@
 import os
 
-# Генерация случайного сообщения
-random_message = os.urandom(32)  # 32 байта случайных данных
+def generate_random_message():
+    message = os.urandom(64)  # Генерируем случайное сообщение (64 байта)
+    readable_message = message.hex()  # Преобразуем в шестнадцатеричную строку
+    return readable_message
 
-# Сохраняем сообщение в файл
-with open("random_message.bin", "wb") as f:
-    f.write(random_message)
-
-print("Случайное сообщение сгенерировано!")
+message = generate_random_message()
+print(f"Сгенерированное сообщение: {message}")
 

@@ -1,23 +1,21 @@
-from Crypto.PublicKey import RSA
 from Crypto.Signature import pkcs1_15
+from Crypto.PublicKey import RSA
 from Crypto.Hash import SHA256
 
-# Загружаем публичный ключ
-with open("public.pem", "rb") as f:
-    public_key = RSA.import_key(f.read())
+# Загрузка публичного ключа
+public_key = RSA.import_key(open("public.pem").read())
 
-# Сообщение и подпись
-message = "Это тестовое сообщение".encode('utf-8')
+# Генерация сообщения для проверки подписи
+message = "Это тестовое сообщение".encode('utf-8')  # Кодируем строку в байты с использованием UTF-8
+hash_message = SHA256.new(message)
+
+# Загрузка подписи из файла
 with open("signature.bin", "rb") as f:
     signature = f.read()
 
-# Хеширование сообщения
-hash_obj = SHA256.new(message)
-
-# Верификация подписи
-verifier = pkcs1_15.new(public_key)
+# Проверка подписи
 try:
-    verifier.verify(hash_obj, signature)
+    pkcs1_15.new(public_key).verify(hash_message, signature)
     print("Подпись верна!")
 except (ValueError, TypeError):
     print("Подпись неверна!")
